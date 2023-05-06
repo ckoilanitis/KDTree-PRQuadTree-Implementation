@@ -1,6 +1,6 @@
 package data_structures;
 
-public class KDTree {
+public class KDTree{
 
     /**
      * Public inner class used in order to return the desired data from the search method.
@@ -28,11 +28,10 @@ public class KDTree {
 
     /**
      * Public method insert that calls the private insert method with the initial arguments.
-     * @param x new Point's x coordinate.
-     * @param y new Point's y coordinate.
+     * @param point point to be inserted.
      */
-    public void insert(int x, int y) {
-        root = insert(root, new Point(x, y), 0);
+    public void insert(Point point) {
+        root = insert(root, point, 0);
     }
 
     /**
@@ -73,12 +72,11 @@ public class KDTree {
 
     /**
      * Public method search that calls the private search method with the initial arguments.
-     * @param x x coordinate of the point that is searched.
-     * @param y y coordinate of the point that is searched.
+     * @param point point that is searched.
      * @return returns a SearchResult obj which contains the depth at which the search stopped and if the point was found the node that had it or null node otherwise.
      */
-    public SearchResult search(int x, int y) {
-        return search(root, new Point(x, y), 0);
+    public SearchResult search(Point point) {
+        return search(root, point, 0);
     }
 
     /**

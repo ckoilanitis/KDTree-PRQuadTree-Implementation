@@ -3,9 +3,9 @@ package test;
 import data_structures.KDTree;
 import data_structures.PRQuadTree;
 import data_structures.Point;
+import utils.PrintStatistics;
 import utils.SamplePoints;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,13 +18,13 @@ public class Test {
         KDTree[] kdTrees = new KDTree[M.length];
         PRQuadTree[] prQuadTrees = new PRQuadTree[M.length];
 
-        int N = (int) Math.pow(2, 20);
+        int N = (int) Math.pow(2, 16);
 
-        int[] kdExistingKeys = new int[M.length];
-        int[] kdNonExistingKeys = new int[M.length];
+        int[] kdExistingKeysTotalDepth = new int[M.length];
+        int[] kdNonExistingKeysTotalDepth = new int[M.length];
 
-        int[] prExisitngKeys = new int[M.length];
-        int[] prNonExistingKeys = new int[M.length];
+        int[] prExistingKeysTotalDepth = new int[M.length];
+        int[] prNonExistingKeysTotalDepth = new int[M.length];
 
         for(int i=0;i<M.length;++i) {
 
@@ -37,59 +37,38 @@ public class Test {
             ArrayList<Point> existingKeys = SamplePoints.getRandomExistingPoints(points,numberOfTests);
 
             for(Point var: points){
-                kdTrees[i].insert(var.getX(), var.getY());
+                kdTrees[i].insert(var);
                 prQuadTrees[i].insert(var);
             }
 
             for(int j=0;j<100;++j){
 
-                if(kdTrees[i].search(existingKeys.get(j).getX(),existingKeys.get(j).getY()) != null){
-                    kdExistingKeys[i] += kdTrees[i].search(existingKeys.get(j).getX(),existingKeys.get(j).getY()).getDepth();
+                if(kdTrees[i].search(existingKeys.get(j)) != null){
+                    kdExistingKeysTotalDepth[i] += kdTrees[i].search(existingKeys.get(j)).getDepth();
                 }
 
                 if(prQuadTrees[i].search(existingKeys.get(j)) != null){
-                    prExisitngKeys[i] += prQuadTrees[i].search(existingKeys.get(j)).depth;
+                    prExistingKeysTotalDepth[i] += prQuadTrees[i].search(existingKeys.get(j)).getDepth();
                 }
 
                 int x;
                 int y;
+                Point tempPoint;
 
                 do{
                     x = random.nextInt(N);
                     y = random.nextInt(N);
+                    tempPoint = new Point(x,y);
 
-                }while(kdTrees[i].search(x,y).getNode() != null);
-                kdNonExistingKeys[i] += kdTrees[i].search(x,y).getDepth();
-                prNonExistingKeys[i] += prQuadTrees[i].search(new Point(x,y)).depth;
+                }while(kdTrees[i].search(tempPoint).getNode() != null);
+                kdNonExistingKeysTotalDepth[i] += kdTrees[i].search(tempPoint).getDepth();
+                prNonExistingKeysTotalDepth[i] += prQuadTrees[i].search(new Point(x,y)).getDepth();
 
             }
         }
-        
-        /* PRINTING RESULTS IN A READABLE FORMAT// */
-        DecimalFormat df = new DecimalFormat("0.00");
-        System.out.println("=================================================================================================");
-        System.out.println("Project 2 Search for 2-dimensional points");
-        System.out.println("=================================================================================================");
-        System.out.println("Tests for KD tree");
-        System.out.println("\t Existing Keys \t \t \t \t \t  Non-Existing Keys");
-        
-        for(int z=0;z<M.length;++z) {
-            if (z < 2)
-                System.out.println("KD: " + df.format((float) kdExistingKeys[z] / 100.00) + "|" + "\t" + "Search[" + M[z] + "]" + "\t\t\t\t" + df.format((float) kdNonExistingKeys[z] / 100.00) + "| Search[" + M[z] + "]");
-            else
-                System.out.println("KD: " + df.format((float) kdExistingKeys[z] / 100.00) + "|" + "\t" + "Search[" + M[z] + "]" + "\t\t\t" + df.format((float) kdNonExistingKeys[z] / 100.00) + "| Search[" + M[z] + "]");
-        }
-        
-        System.out.println("=================================================================================================");
-        System.out.println("Tests for PR Quad tree");
-        System.out.println("\t Existing Keys \t \t \t \t \t  Non-Existing Keys");
-        
-        for(int h=0;h<M.length;++h) {
-            if (h < 2)
-                System.out.println("PR: " + df.format((float) prExisitngKeys[h] / 100.00) + "|" + "\t" + "Search[" + M[h] + "]" + "\t\t\t\t" + df.format((float) prNonExistingKeys[h] / 100.00) + "| Search[" + M[h] + "]");
-            else
-                System.out.println("PR: " + df.format((float) prExisitngKeys[h] / 100.00) + "|" + "\t" + "Search[" + M[h] + "]" + "\t\t\t" + df.format((float) prNonExistingKeys[h] / 100.00) + "| Search[" + M[h] + "]");
-        }
+
+        /* //PRINTING RESULTS IN A READABLE FORMAT// */
+        PrintStatistics.print(kdExistingKeysTotalDepth,kdNonExistingKeysTotalDepth,prExistingKeysTotalDepth,prNonExistingKeysTotalDepth,M);
     }
 
 }

@@ -33,13 +33,12 @@ public class SamplePoints {
     static public ArrayList<Point> generateSamplePoints(int N, int numberOfPoints) {
         ArrayList<Point> points = new ArrayList<>();
         Random random = new Random();
-
         for (int i = 0; i < numberOfPoints; i++) {
             int x = random.nextInt(N);
             int y = random.nextInt(N);
             points.add(new Point(x, y));
-        }
 
+        }
         return points;
     }
 }

@@ -1,8 +1,8 @@
 package data_structures;
 
 public class Point {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     public Point(int x, int y){
         this.x = x;
@@ -15,13 +15,9 @@ public class Point {
      * @param other Point to compare.
      * @return  True if equal False otherwise,
      */
-    public boolean equals(Point other){
+    public boolean equals(Point other) {
 
-        if(this.x == other.getX() && this.y == other.getY()){
-            return true;
-        }
-
-        return false;
+        return (this.x == other.getX() && this.y == other.getY());
     }
 
     public int getX() {

@@ -1,14 +1,12 @@
 package data_structures;
 
 public class KDNode {
-    private Point point;
+    private final Point point;
     private KDNode left,right;
-    private int level;
-    private int axis;
+    private final int axis;
 
     public KDNode(Point point, int level){
         this.point = point;
-        this.level = level;
         this.axis = level % 2;
         this.left = null;
         this.right = null;

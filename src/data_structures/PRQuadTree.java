@@ -7,16 +7,20 @@ public class PRQuadTree {
      * Specifically has the node that the search stopped on and the depth at which the search stopped.
      */
     public static class SearchResult {
-        public PRQuadNode node;
-        public int depth;
+        PRQuadNode node;
+        int depth;
 
         public SearchResult(PRQuadNode node, int depth) {
             this.node = node;
             this.depth = depth;
         }
+
+        public int getDepth() {
+            return depth;
+        }
     }
 
-    int maxSize = (1<<20);
+    int maxSize = (1<<16);
     private PRQuadNode root;
 
     /**
@@ -50,7 +54,7 @@ public class PRQuadTree {
         SearchResult result;
 
         if (node == null) {
-            result = new SearchResult(null, depth + 1);
+            result = new SearchResult(null, depth);
         } else if (node.point != null && node.point.equals(point)) {
             result = new SearchResult(node, depth);
         } else if (node.children != null) {
@@ -90,6 +94,9 @@ public class PRQuadTree {
                 node.children = new PRQuadNode[4];
             }
             if (node.point != null) {
+                if(node.point.equals(point)){
+                    return node;
+                }
                 int existingPointIndex = getIndex(node.point, x, y, halfSize);
                 node.children[existingPointIndex] = new PRQuadNode(node.point);
                 node.point = null;
@@ -112,20 +119,13 @@ public class PRQuadTree {
         int index = 0;
 
         if (point.getX() >= x + halfSize) {
-            index |= 1; // index -> 0001 if point's x coordinate is greater or equal to the center x coordinate.
+            index |= 1; //(bit operator OR) index -> 0001 if point's x coordinate is greater or equal to the center x coordinate.
         }
         if (point.getY() >= y + halfSize) {
-            index |= 2; // index -> 0010 or 0011 depending on the previous if and if point's y coordinate is greater or equal to the center y coordinate.
+            index |= 2; // index ->(bit operator OR) 0010 or 0011 depending on the previous if and if point's y coordinate is greater or equal to the center y coordinate.
         }
 
         return index; // index can be 0, 1, 2 or 3 depending on the if statements.
     }
-
-
-
-
-
-
-
 
 }
